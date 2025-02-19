@@ -1,0 +1,58 @@
+{
+  "Error": {
+    "description": "<div><p>很遗憾，我们遇到了一个错误。</p><p>您可以尝试 <retry>重新加载</retry> 您访问的页面。</p></div>",
+    "title": "出了点问题!"
+  },
+  "LocaleLayout": {
+    "title": "食品配送",
+    "description": "食品配送平台"
+  },
+  "NotFoundPage": {
+    "title": "404",
+    "description": "该页面无法找到"
+  },
+  "LocaleSwitcher": {
+    "en": "英文",
+    "zh": "中文",
+    "label": "语言"
+  },
+  "AppearanceSwitcher": {
+    "dark": "暗黑",
+    "light": "明亮",
+    "system": "系统",
+    "label": "外观"
+  },
+  "NavItems": {
+    "home": "首页",
+    "about us": "关于我们",
+    "restaurants": "餐馆",
+    "popular Foods": "热门食物",
+    "contact us": "联系我们"
+  },
+  "LoginModal": {
+    "header": "食品平台",
+    "email": "电子邮件",
+    "password": "密码",
+    "forgotPassword": "忘记密码？",
+    "login": "登录",
+    "orJoinWith": "或者加入",
+    "notAccount": "没有任何账户？",
+    "signUp": "注册"
+  },
+  "ProfileDropDown": {
+    "signedInAs": "当前账号为",
+    "myProfile": "个人资料",
+    "allOrders": "所有订单",
+    "applyForSellerAccount": "申请卖家账号",
+    "logOut": "退出"
+  },
+  "FormValidationErrorPrompt": {
+    "required": "此字段为必填项。",
+    "invalidEmail": "请输入有效的电子邮件地址。",
+    "passwordMismatch": "密码不匹配。",
+    "passwordLength": "密码长度必须至少为8个字符！"
+  },
+  "HomePage": {
+    "logo": "图标"
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "Error": {
+    "description": "<div><p>We've unfortunately encountered an error.</p><p>You can try to <retry>reload the page</retry> you were visiting.</p></div>",
+    "title": "Something went wrong!"
+  },
+  "LocaleLayout": {
+    "title": "Food Delivery",
+    "description": "Food Delivery Platform"
+  },
+  "NotFoundPage": {
+    "title": "404",
+    "description": "This page could not be found."
+  },
+  "LocaleSwitcher": {
+    "en": "English",
+    "zh": "Chinese",
+    "label": "Language"
+  },
+  "AppearanceSwitcher": {
+    "dark": "Dark",
+    "light": "Light",
+    "system": "System",
+    "label": "Appearance"
+  },
+  "NavItems": {
+    "home": "Home",
+    "about us": "About us",
+    "restaurants": "Restaurants",
+    "popular Foods": "Popular Foods",
+    "contact us": "Contact us"
+  },
+  "LoginModal": {
+    "header": "Login with Food Platform",
+    "email": "Enter your Email",
+    "password": "Enter your Password",
+    "forgotPassword": "Forgot your password?",
+    "login": "Login",
+    "orJoinWith": "Or Join With",
+    "notAccount": "Not have any account?",
+    "signUp": "Sign up"
+  },
+  "ProfileDropDown": {
+    "signedInAs": "Signed in as",
+    "myProfile": "My Profile",
+    "allOrders": "All Orders",
+    "applyForSellerAccount": "Apply for seller account",
+    "logOut": "Log Out"
+  },
+  "FormValidationErrorPrompt": {
+    "required": "This field is required.",
+    "invalidEmail": "Please enter a valid email address.",
+    "passwordMismatch": "Passwords do not match.",
+    "passwordLength": "Password must be at least 8 characters long!"
+  },
+  "HomePage": {
+    "logo": "Logo"
+  }
+}

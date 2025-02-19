@@ -1,0 +1,63 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+generator json {
+  provider = "node node_modules/prisma-json-schema-generator"
+  output   = "../generated/prisma.schema.json"
+}
+
+generator docs {
+  provider = "node node_modules/prisma-docs-generator"
+  output   = "../generated/prisma.docs"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  System_Biz_Administrator
+  Ordinary_User
+}
+
+model Avatars {
+  id        String @id @default(auto()) @map("_id") @db.ObjectId
+  public_id String
+  url       String
+  user      User   @relation(fields: [userId], references: [id])
+  userId    String @unique @db.ObjectId
+}
+
+model Post {
+  id       String   @id @default(auto()) @map("_id") @db.ObjectId
+  title    String
+  content  String
+  // 级联的关系，当用户删除时，删除用户的所有文章
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId   String   @db.ObjectId
+  createAt DateTime @default(now())
+  updateAt DateTime @updatedAt
+}
+
+model User {
+  id       String   @id @default(auto()) @map("_id") @db.ObjectId
+  name     String
+  sex      Int      @default(1) // 0 - 女 1 - 男
+  email    String   @unique
+  mobile   String   @unique
+  address  String?
+  password String
+  avatar   Avatars?
+  role     Role     @default(Ordinary_User)
+  createAt DateTime @default(now())
+  updateAt DateTime @updatedAt
+  posts    Post[]
+}
