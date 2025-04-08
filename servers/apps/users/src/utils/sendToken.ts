@@ -1,6 +1,7 @@
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { User } from '../entities/user.entities';
+import { accessTokenExpiresIn, refreshTokenExpiresIn } from '../constants';
 
 export class GenerateToken {
   constructor(
@@ -16,7 +17,7 @@ export class GenerateToken {
       },
       {
         secret: this.configService.get<string>('ACCESS_TOKEN_SECRET'),
-        expiresIn: '30m',
+        expiresIn: accessTokenExpiresIn,
       },
     );
 
@@ -27,7 +28,7 @@ export class GenerateToken {
       },
       {
         secret: this.configService.get<string>('REFRESH_TOKEN_SECRET'),
-        expiresIn: '7d',
+        expiresIn: refreshTokenExpiresIn,
       },
     );
 

@@ -12,8 +12,8 @@ export const localePrefix =
 
 export const pathnames = {
   "/": "/",
-  "/pathnames": {
-    en: "/pathnames",
-    zh: "/pfadnamen",
-  },
+  // "/pathnames": {
+  //   en: "/path",
+  //   zh: "/",
+  // },
 };

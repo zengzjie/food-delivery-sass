@@ -89,7 +89,7 @@ export class ActivationDto {
 }
 
 @InputType()
-export class ForgotPasswordDto {
+export class ResetPasswordDto {
   @Field()
   @IsNotEmpty({ message: 'Email is required.' })
   @IsEmail({}, { message: 'Email must be valid.' })

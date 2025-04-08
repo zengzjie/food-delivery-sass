@@ -78,7 +78,7 @@ input::-webkit-inner-spin-button {
 
 @layer components {
   .btn-close {
-    @apply absolute appearance-none select-none top-1 end-1 p-2 text-foreground-500 rounded-full hover:bg-default-100 active:bg-default-200 tap-highlight-transparent outline-none data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2;
+    @apply absolute appearance-none select-none top-1 end-1 p-2 rounded-full outline-none;
   }
 }
 
@@ -144,5 +144,33 @@ input::-webkit-inner-spin-button {
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+@layer utilities {
+  .scrollbar::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  .scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+    box-shadow: none;
+    border-radius: 5px;
+  }
+
+  .scrollbar::-webkit-scrollbar-thumb {
+    width: 6px;
+    background: rgb(15 23 42 / var(--tw-bg-opacity, 1));
+    background-clip: padding-box;
+    border-color: transparent;
+    border-width: 2px;
+    border-radius: 10px;
+    box-shadow: none;
+    cursor: pointer;
+  }
+
+  .scrollbar::-webkit-scrollbar-thumb:hover {
+    background: rgb(30 41 59 / var(--tw-bg-opacity, 1));
   }
 }

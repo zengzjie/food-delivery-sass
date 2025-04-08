@@ -36,11 +36,22 @@ export class ActivationResponse extends BaseResponse {}
 
 @ObjectType()
 export class LoginResponse {
-  @Field()
-  access_token: string;
+  // @Field()
+  // access_token: string;
 
+  // @Field()
+  // refresh_token: string;
   @Field()
-  refresh_token: string;
+  code: number;
+
+  @Field(() => ErrorType, { nullable: true })
+  error?: ErrorType;
+}
+
+@ObjectType()
+export class RefreshTokenResponse {
+  @Field()
+  success: boolean;
 
   @Field(() => ErrorType, { nullable: true })
   error?: ErrorType;

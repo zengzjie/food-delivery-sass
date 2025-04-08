@@ -66,7 +66,7 @@ export default function AppearanceSwitcherSelect({ items, label }: Props) {
       <SelectTrigger
         aria-label={label}
         className={clsx(
-          "rounded-sm p-2 transition-colors hover:bg-accent border-none",
+          "rounded-sm p-2 transition-colors hover:bg-accent border-none bg-transparent",
           isPending && "pointer-events-none opacity-60"
         )}
         showDownIcon={false}

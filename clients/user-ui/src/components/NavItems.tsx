@@ -27,13 +27,15 @@ const NavItems = ({ activeItem = 0 }: { activeItem?: number }) => {
     },
   ];
   return (
-    <div className="break-words flex items-center justify-start flex-wrap gap-8 min-[900px]:pl-0 pl-2 max-[900px]:gap-4 max-[765px]:gap-2">
+    <div className="break-words flex flex-col md:flex-row items-start md:items-center justify-start flex-wrap gap-4 md:gap-8 pl-4 md:pl-0">
       {navItems.map((item, index) => {
         return (
           <Link
             className={`text-[16px] font-Poppins font-[500] ${
-              activeItem === index && "text-[#37b668]"
-            }`}
+              activeItem === index
+                ? "text-primary"
+                : "text-muted-foreground"
+            } max-[600px]:text-[14px] max-[600px]:font-[400]`}
             key={item.url}
             href={item.url}
           >

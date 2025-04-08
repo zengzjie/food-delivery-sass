@@ -1,3 +1,8 @@
+export const accessTokenExpiresIn = '1m';
+export const refreshTokenExpiresIn = '5m';
+export const accessTokenMaxAge = 1000 * 60 * 60 * 24;
+export const refreshTokenMaxAge = 1000 * 60 * 60 * 24 * 7;
+
 export enum STATUS_CODE {
   SUCCESS = 200,
   CREATED = 201,

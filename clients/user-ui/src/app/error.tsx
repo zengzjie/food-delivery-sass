@@ -1,7 +1,6 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { useEffect } from "react";
 
 type Props = {
   error: Error;
@@ -11,13 +10,8 @@ type Props = {
 export default function Error({ error, reset }: Props) {
   const t = useTranslations("Error");
 
-  useEffect(() => {
-    console.error(error, '11');
-  }, [error]);
-
   return (
     <div>
-      1
       {t.rich("description", {
         p: (chunks) => <p className="mt-4">{chunks}</p>,
         retry: (chunks) => (

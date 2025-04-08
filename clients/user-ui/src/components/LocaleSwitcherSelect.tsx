@@ -1,6 +1,6 @@
 "use client";
 
-import { HiLanguage as LanguageIcon } from "react-icons/hi2";
+import { Languages } from "lucide-react";
 import { useTransition } from "react";
 import { Locale, usePathname, useRouter } from "@/i18n/routing";
 import { useLocale } from "next-intl";
@@ -38,12 +38,12 @@ export default function LocaleSwitcherSelect({ items, label }: Props) {
         <SelectTrigger
           aria-label={label}
           className={clsx(
-            "rounded-sm p-2 transition-colors hover:bg-accent border-none",
+            "rounded-sm p-2 transition-colors hover:bg-accent border-none bg-transparent",
             isPending && "pointer-events-none opacity-60"
           )}
           showDownIcon={false}
         >
-          <LanguageIcon className="h-6 w-6 transition-colors" />
+          <Languages className="h-6 w-6 transition-colors" />
         </SelectTrigger>
         <SelectContent align="end">
           <SelectGroup>

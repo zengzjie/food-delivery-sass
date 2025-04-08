@@ -32,7 +32,7 @@ model Avatars {
   id        String @id @default(auto()) @map("_id") @db.ObjectId
   public_id String
   url       String
-  user      User   @relation(fields: [userId], references: [id])
+  user      User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    String @unique @db.ObjectId
 }
 

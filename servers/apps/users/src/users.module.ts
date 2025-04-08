@@ -57,18 +57,33 @@ import { HTTP_STATUS_MESSAGES, STATUS_CODE } from './constants';
       }),
       // 自定义错误处理
       formatError: (error: GraphQLError) => {
-        const message = (error?.extensions?.originalError as any)?.error
-          ? (error?.extensions?.originalError as any)?.message
-          : HTTP_STATUS_MESSAGES[error?.extensions?.code as any]
-            ? HTTP_STATUS_MESSAGES[error?.extensions?.code as any]
-            : HTTP_STATUS_MESSAGES['INTERNAL_SERVER_ERROR'];
+        let graphQLFormattedError = {} as GraphQLFormattedError;
+        // 需要处理一下 jwt expired 的错误
+        if (
+          error.path.includes('refreshToken') &&
+          error?.message.includes('jwt expired')
+        ) {
+          graphQLFormattedError = {
+            // message: '登录态已失效，请重新登陆',
+            message: 'Login status has expired, please log in again.',
+            extensions: {
+              code: STATUS_CODE.FORBIDDEN,
+            },
+          };
+        } else {
+          const message = (error?.extensions?.originalError as any)?.error
+            ? (error?.extensions?.originalError as any)?.message
+            : HTTP_STATUS_MESSAGES[error?.extensions?.code as any]
+              ? HTTP_STATUS_MESSAGES[error?.extensions?.code as any]
+              : HTTP_STATUS_MESSAGES['INTERNAL_SERVER_ERROR'];
 
-        const graphQLFormattedError: GraphQLFormattedError = {
-          message,
-          extensions: {
-            code: STATUS_CODE[error?.extensions?.code as any],
-          },
-        };
+          graphQLFormattedError = {
+            message,
+            extensions: {
+              code: STATUS_CODE[error?.extensions?.code as any],
+            },
+          };
+        }
         return graphQLFormattedError;
       },
       playground: {

@@ -32,9 +32,6 @@ export class User {
   email: string;
 
   @Field()
-  password: string;
-
-  @Field()
   mobile: string;
 
   @Field({ nullable: true })

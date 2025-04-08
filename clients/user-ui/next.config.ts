@@ -11,6 +11,14 @@ const nextConfig: NextConfig = {
     // 启用局部渲染优化
     // ppr: "incremental",
   },
+  // rewrites: async () => {
+  //   return [
+  //     {
+  //       source: "/graphql",
+  //       destination: "http://localhost:4001/graphql",
+  //     },
+  //   ];
+  // },
 };
 
 export default withNextIntl(nextConfig);

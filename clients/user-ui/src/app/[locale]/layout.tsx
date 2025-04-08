@@ -9,6 +9,7 @@ import {
 import { Providers } from "@/providers/NextUIProvider";
 import { routing } from "@/i18n/routing";
 import { notFound } from "next/navigation";
+import { Toaster } from "react-hot-toast";
 import "./styles.css";
 
 type Props = {
@@ -49,7 +50,6 @@ export default async function LocaleLayout({
   if (!routing.locales.includes(locale as any)) {
     notFound();
   }
-
   // 启用静态渲染
   setRequestLocale(locale);
   const messages = await getMessages();
@@ -63,27 +63,9 @@ export default async function LocaleLayout({
       <body
         className={`${poppins.variable} ${inter.variable} antialiased flex flex-col h-full`}
       >
+        <Toaster position="top-center" reverseOrder={false} />
         <Providers>
-          <NextIntlClientProvider
-            messages={messages}
-            timeZone="Asia/Shanghai"
-            formats={{
-              dateTime: {
-                short: {
-                  dateStyle: "medium",
-                  timeStyle: "short",
-                  hour12: false,
-                  timeZone: "Asia/Shanghai",
-                },
-                long: {
-                  dateStyle: "full",
-                  timeStyle: "long",
-                  hour12: false,
-                  timeZone: "Asia/Shanghai",
-                },
-              },
-            }}
-          >
+          <NextIntlClientProvider messages={messages}>
             {children}
           </NextIntlClientProvider>
         </Providers>

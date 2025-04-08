@@ -11,6 +11,10 @@
     "title": "404",
     "description": "该页面无法找到"
   },
+  "ServerErrorPage": {
+    "title": "500",
+    "description": "服务器内部错误，请联系管理员！"
+  },
   "LocaleSwitcher": {
     "en": "英文",
     "zh": "中文",
@@ -30,14 +34,45 @@
     "contact us": "联系我们"
   },
   "LoginModal": {
-    "header": "食品平台",
+    "header": "食品平台登录",
     "email": "电子邮件",
     "password": "密码",
-    "forgotPassword": "忘记密码？",
+    "resetPassword": "重置密码",
     "login": "登录",
     "orJoinWith": "或者加入",
     "notAccount": "没有任何账户？",
-    "signUp": "注册"
+    "signUp": "注册",
+    "loginSuccess": "登录成功。",
+    "loginError": "登录失败，请重试。",
+    "logoutSuccess": "登出",
+    "logoutError": "登出失败，请重试。"
+  },
+  "SignUpModal": {
+    "header": "食品平台注册",
+    "name": "昵称",
+    "email": "电子邮件",
+    "mobile": "手机号码",
+    "password": "密码",
+    "resetPassword": "重置密码",
+    "login": "登录",
+    "orJoinWith": "或者加入",
+    "alreadyAccount": "已经有账户？",
+    "signIn": "登录",
+    "signUp": "注册",
+    "captchaSent": "验证码已发送，请查看您的电子邮件。",
+    "captchaTitle": "验证您的验证码",
+    "captchaCodeTip": "请输入激活验证码。",
+    "captchaOTP": "验证 OTP",
+    "captchaSuccess": "验证成功。",
+    "captchaError": "验证码验证失败，请重试。",
+    "goBackToSignIn": "返回登录?"
+  },
+  "ResetPasswordModal": {
+    "header": "重置密码",
+    "email": "电子邮件",
+    "tip": "或者返回",
+    "login": "登录",
+    "successMsg": "重置密码链接已发送至您的邮箱"
   },
   "ProfileDropDown": {
     "signedInAs": "当前账号为",
@@ -47,8 +82,10 @@
     "logOut": "退出"
   },
   "FormValidationErrorPrompt": {
+    "placeholderName": "请输入昵称",
     "required": "此字段为必填项。",
     "invalidEmail": "请输入有效的电子邮件地址。",
+    "invalidMobile": "请输入有效的手机号码。",
     "passwordMismatch": "密码不匹配。",
     "passwordLength": "密码长度必须至少为8个字符！"
   },

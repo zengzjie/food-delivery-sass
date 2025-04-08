@@ -8,6 +8,7 @@ import { RegisterDto, ActivationDto, GetUserDto } from './dto/user.dto';
 import { EmailService } from './email/email.service';
 import { GraphContextType } from './typing';
 import { RedisService } from './redis/redis.service';
+import { STATUS_CODE } from './constants';
 
 interface UserData {
   name: string;
@@ -94,14 +95,21 @@ export class UsersService {
     const { activation_token, activation_code: activationCode } =
       await this.createActivationToken(user);
 
-    // Send email
-    await this.emailService.sendMail({
-      to: email,
-      subject: 'Activate your account!',
-      template: 'activation-mail',
-      name,
-      activationCode,
-    });
+    // Verify whether the email address is a Gmail address.
+    const isGmail = email.includes('@gmail.com');
+
+    if (isGmail) {
+      // Send email
+      await this.emailService.sendMail({
+        to: email,
+        subject: 'Activate your account!',
+        template: 'activation-mail',
+        name,
+        activationCode,
+      });
+    } else {
+      throw new BadRequestException('Please use a Gmail address to register!');
+    }
 
     return { activation_token, response };
   }
@@ -140,6 +148,14 @@ export class UsersService {
         email,
         password,
         mobile,
+        avatar: {
+          create: {
+            // public_id: 'user_123_avatar', // 这是 Cloudinary 或 S3 存储的唯一标识
+            // url: 'https://res.cloudinary.com/myapp/image/upload/v123456/user_123_avatar.jpg',
+            public_id: 'avatar',
+            url: 'https://github.com/shadcn.png',
+          },
+        },
       },
     });
 
@@ -171,6 +187,7 @@ export class UsersService {
         id,
       },
       include: {
+        avatar: true,
         posts: true,
       },
     });
@@ -189,6 +206,59 @@ export class UsersService {
   }
 
   /**
+   * @description Create a temporary reset password token
+   * @param user
+   * @returns
+   */
+  createResetPasswordToken(user) {
+    const resetPasswordToken = this.jwtService.sign(
+      {
+        user,
+      },
+      {
+        secret: this.configService.get<string>('RESET_PASSWORD_SECRET'),
+        expiresIn: '5m',
+      },
+    );
+    return resetPasswordToken;
+  }
+
+  /**
+   * @description Reset password
+   * @param userDto
+   * @returns
+   */
+  async resetPassword(email: string) {
+    const user = await this.prisma.user.findUnique({
+      where: {
+        email,
+      },
+    });
+    if (!user) {
+      throw new BadRequestException('User not found with this email!');
+    }
+    // 生成临时的重置密码 token
+    const resetPasswordToken = this.createResetPasswordToken(user);
+    // 创建重置密码的链接
+    const resetPasswordUrl =
+      this.configService.get<string>('CLIENT_SIDE_URI') +
+      `/reset-password?token=${resetPasswordToken}`;
+
+    this.emailService.sendMail({
+      to: email,
+      subject: 'Reset Password',
+      template: 'reset-password',
+      name: user.name,
+      activationCode: resetPasswordUrl,
+    });
+
+    return {
+      code: STATUS_CODE.SUCCESS,
+      msg: 'Reset password link has been sent to your email',
+    };
+  }
+
+  /**
    * @description Logout user
    */
   async logout(context: GraphContextType) {
@@ -196,9 +266,18 @@ export class UsersService {
     try {
       await this.redisService.del([
         'user-info',
-        `user-token-${(context.req.user as any)?.userId}`,
+        `user-token-${(context.req.user as any)?.id}`,
       ]);
       context.req.user = null;
+      context.res.cookie('Authorization', '', {
+        httpOnly: true,
+        maxAge: 0,
+        expires: new Date(0), // Immediate invalidation
+        secure: process.env.NODE_ENV === 'production', // Set to true if using https
+        sameSite: 'lax', // Adjust as needed
+        // domain: 'example.com' // production domain
+        domain: process.env.NODE_ENV === 'production' ? '.example.com' : '',
+      });
     } catch (error) {
       console.log('error => ', error);
     }

@@ -16,7 +16,9 @@ const PathnamesPage = async ({ params }: Props) => {
     ["HTML", "CSS", "JavaScript"],
     "enumeration"
   );
-  console.log(formattedDate, formattedNumber, formattedList);
+  console.log("formattedDate => ", formattedDate);
+  console.log("formattedNumber => ", formattedNumber);
+  console.log("formattedList => ", formattedList);
 
   // 启用静态渲染
   setRequestLocale(locale);

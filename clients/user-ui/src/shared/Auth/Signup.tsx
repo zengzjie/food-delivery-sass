@@ -7,45 +7,43 @@ import styles from "@/utils/styles";
 import { X as CloseX, Eye, EyeOff, Loader2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useMutation } from "@apollo/client";
-import { LOGIN_MUTATION } from "@/graphql/actions/login.action";
+import { REGISTER_MUTATION } from "@/graphql/actions/register.action";
 import toast from "react-hot-toast";
-import { encrypt } from "@/utils/encrypt";
-import useUserInfo from "@/hooks/useUserInfo";
-import { useUserStore } from "@/stores/userStore";
 import { AuthModes } from "@/screens/AuthScreen";
 
-type LoginProps = {
-  closeScreen: (nextValue?: any) => void;
+type SignUpProps = {
+  closeScreen: () => void;
   switchAuthMode: Dispatch<SetStateAction<AuthModes>>;
+  needCaptcha: (activationToken: string) => void;
 };
 
 const formSchema = z.object({
+  name: z.string().nonempty(),
   email: z.string().email(),
   password: z.string().min(8),
+  mobile: z.string().min(11),
 });
 
-type LoginSchema = z.infer<typeof formSchema>;
+type SignupSchema = z.infer<typeof formSchema>;
 
-const Login = (props: LoginProps) => {
-  const { closeScreen, switchAuthMode } = props;
-  const initUser = useUserStore((state) => state.initUser);
-  const t = useTranslations("LoginModal");
+const Signup = (props: SignUpProps) => {
+  const { closeScreen, switchAuthMode, needCaptcha } = props;
+  const t = useTranslations("SignUpModal");
   const _t = useTranslations("FormValidationErrorPrompt");
-  const tError = useTranslations("ServerErrorPage");
   const [show, setShow] = useState(false);
 
-  const { getUserInfo } = useUserInfo();
+  const [registerUserMutation, { loading }] = useMutation(REGISTER_MUTATION);
 
   const {
     register,
     handleSubmit,
-    resetField,
+    reset,
     formState: { errors, isSubmitting },
-  } = useForm<LoginSchema>({
+  } = useForm<SignupSchema>({
     resolver: zodResolver(formSchema),
   });
 
-  const [loginMutation, { loading }] = useMutation(LOGIN_MUTATION);
+  console.log(errors, "errors");
 
   useLayoutEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -79,38 +77,25 @@ const Login = (props: LoginProps) => {
     };
   }, []);
 
-  const onSubmit: SubmitHandler<LoginSchema> = async (data: LoginSchema) => {
-    // 对 password 进行加密
-    const encryptPassword = encrypt(data.password);
+  const onSubmit: SubmitHandler<SignupSchema> = async (data: SignupSchema) => {
     try {
-      const { data: result } = await loginMutation({
+      const resp = await registerUserMutation({
         variables: {
-          email: data.email,
-          password: encryptPassword,
+          ...data,
         },
       });
-      if (result.login.code === 200) {
-        toast.success(t("loginSuccess"));
-        const resp = await getUserInfo();
-        const detail = resp.data.getUserDetail;
-        if (detail) {
-          initUser(detail);
-        }
-        closeScreen();
-      } else {
-        toast.error(tError("description"));
-      }
+      toast.success(t("captchaSent"));
+      needCaptcha(resp.data.register.activation_token);
+      reset();
     } catch (error: any) {
-      console.error(error);
-      toast.error(t("loginError"));
+      toast.error(error.message);
     }
-    resetField("password");
   };
 
   return (
     <section
       tabIndex={-1}
-      className="flex flex-col relative z-50 w-full box-border dark:bg-slate-900 bg-background outline-none mx-1 my-1 sm:mx-6 sm:my-16 max-w-lg rounded-large shadow-small overflow-y-hidden"
+      className="flex flex-col relative z-50 w-full box-border dark:bg-slate-900 bg-background outline-none mx-1 my-1 sm:mx-6 max-w-lg rounded-large shadow-small overflow-y-hidden"
     >
       <button
         tabIndex={0}
@@ -127,66 +112,90 @@ const Login = (props: LoginProps) => {
       <header className="py-4 px-6 flex-initial text-large font-semibold flex flex-col gap-1">
         {t("header")}
       </header>
-      <div className="px-4 py-6 flex flex-col">
+      <div className="pr-4 pl-6 py-6 flex flex-col">
         <form className="flex flex-col" onSubmit={handleSubmit(onSubmit)}>
-          <div className="w-full">
-            <label className={`${styles.label}`}>{t("email")}</label>
-            <input
-              {...register("email")}
-              type="email"
-              placeholder="example@gmail.com"
-              className={`${styles.input}`}
-            />
-            {errors.email && (
-              <span className="text-red-500 block mt-1">{`${_t(
-                "invalidEmail"
-              )}`}</span>
+          <div className="sm:h-96 overflow-y-scroll scrollbar">
+            <div className="w-full pr-2">
+              <label className={`${styles.label}`}>{t("name")}</label>
+              <input
+                {...register("name")}
+                type="text"
+                placeholder={_t("placeholderName")}
+                className={`${styles.input}`}
+              />
+              {errors.name && (
+                <span className="text-red-500 block mt-1">{`${_t(
+                  "required"
+                )}`}</span>
+              )}
+            </div>
+            <div className="w-full mt-5 pr-2">
+              <label className={`${styles.label}`}>{t("email")}</label>
+              <input
+                {...register("email")}
+                type="email"
+                placeholder="example@gmail.com"
+                className={`${styles.input}`}
+              />
+              {errors.email && (
+                <span className="text-red-500 block mt-1">{`${_t(
+                  "invalidEmail"
+                )}`}</span>
+              )}
+            </div>
+            <div className="w-full mt-5 pr-2">
+              <label className={`${styles.label}`}>{t("mobile")}</label>
+              <input
+                {...register("mobile")}
+                type="tel"
+                placeholder="+86 138********"
+                className={`${styles.input}`}
+              />
+              {errors.mobile && (
+                <span className="text-red-500 block mt-1">{`${_t(
+                  "invalidMobile"
+                )}`}</span>
+              )}
+            </div>
+            <div className="w-full mt-5 relative mb-1 pr-2">
+              <label htmlFor="password" className={`${styles.label}`}>
+                {t("password")}
+              </label>
+              <input
+                {...register("password")}
+                type={show ? "text" : "password"}
+                placeholder="password!@%"
+                className={`${styles.input}`}
+              />
+              {!show ? (
+                <EyeOff
+                  className="absolute bottom-3 right-4 z-1 cursor-pointer"
+                  size={20}
+                  onClick={() => setShow(true)}
+                />
+              ) : (
+                <Eye
+                  className="absolute bottom-3 right-4 z-1 cursor-pointer"
+                  size={20}
+                  onClick={() => setShow(false)}
+                />
+              )}
+            </div>
+            {errors.password && (
+              <span className="text-red-500">{`${_t("passwordLength")}`}</span>
             )}
           </div>
-          <div className="w-full mt-5 relative mb-1">
-            <label htmlFor="password" className={`${styles.label}`}>
-              {t("password")}
-            </label>
-            <input
-              {...register("password")}
-              type={show ? "text" : "password"}
-              placeholder="password!@%"
-              className={`${styles.input}`}
-            />
-            {!show ? (
-              <EyeOff
-                className="absolute bottom-3 right-2 z-1 cursor-pointer"
-                size={20}
-                onClick={() => setShow(true)}
-              />
-            ) : (
-              <Eye
-                className="absolute bottom-3 right-2 z-1 cursor-pointer"
-                size={20}
-                onClick={() => setShow(false)}
-              />
-            )}
-          </div>
-          {errors.password && (
-            <span className="text-red-500">{`${_t("passwordLength")}`}</span>
-          )}
+
           <div className="w-full mt-5">
-            <span
-              className={`text-[16px] font-Poppins text-[#2190ff] block text-right cursor-pointer`}
-              onClick={() => switchAuthMode(AuthModes.ResetPassword)}
-            >
-              {t("resetPassword")}
-            </span>
-            <br />
             <button
               type="submit"
               className={`${styles.button}`}
-              disabled={isSubmitting}
+              disabled={isSubmitting || loading}
             >
               {isSubmitting || loading ? (
                 <Loader2 className="animate-spin mr-1" />
               ) : null}
-              {t("login")}
+              {t("signUp")}
             </button>
           </div>
           <h5 className="text-center pt-4 font-Poppins text-[16px]">
@@ -216,12 +225,12 @@ const Login = (props: LoginProps) => {
             </div>
           </div>
           <h5 className="text-center pt-4 font-Poppins text-[14px]">
-            {t("notAccount")}
+            {t("alreadyAccount")}
             <span
               className="text-[#2190ff] pl-1 cursor-pointer"
-              onClick={() => switchAuthMode(AuthModes.Signup)}
+              onClick={() => switchAuthMode(AuthModes.Login)}
             >
-              {t("signUp")}
+              {t("login")}
             </span>
           </h5>
           <br />
@@ -231,4 +240,4 @@ const Login = (props: LoginProps) => {
   );
 };
 
-export default Login;
+export default Signup;

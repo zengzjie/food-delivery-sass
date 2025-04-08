@@ -28,7 +28,6 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     if (context.getType<GqlContextType>() === 'graphql') {
       const info = GqlExecutionContext.create(context).getInfo();
       const req = this.getRequest(context);
-
       const isInGlobalWhitelist = this.globalWhiteList.some(
         (fieldName) => fieldName === info.fieldName,
       );
@@ -55,17 +54,22 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
         const cacheToken = await this.redisService.get(
           `user-token-${JSON.parse(userInfo).id}`,
         );
-        const token = ExtractJwt.fromAuthHeaderAsBearerToken()(req);
-        // const token = ExtractJwt.fromHeader('Cookie')(req);/
-        // console.log(token, cacheToken);
+        const token = req.cookies['Authorization'];
 
-        // 验证单点登录
+        if (!token) {
+          throw new UnauthorizedException();
+        }
+
+        // 如果 token 不一致则代表用户已在其他地方登录
         if (token !== cacheToken) {
           throw new UnauthorizedException(
             'Your account has been logged in from another location, please log in again.',
           );
         }
 
+        // super.canActivate(context) 会调用 passport.authenticate 方法验证 token, 默认情况下是 passport-jwt 是从 Authorization 头中获取 token
+        // 因为在 JwtStrategy 中配置了 jwtFromRequest: ExtractJwt.fromExtractors([ ... ]) 从 cookie 中获取 token, 所以这里可以直接调用 super.canActivate(context)
+        // 如果是设置的 fromAuthHeaderAsBearerToken 则这里会报错, 因为没有 Authorization 头
         return <boolean>await super.canActivate(context);
       }
     } else {

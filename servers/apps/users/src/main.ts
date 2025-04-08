@@ -19,6 +19,10 @@ async function bootstrap() {
   app.setViewEngine('ejs');
 
   app.use(cookieParser());
+  app.enableCors({
+    origin: process.env.NODE_ENV === 'production' ? 'https://example.com' : 'http://localhost:6001',
+    credentials: true,
+  });
 
   await app.listen(process.env.PORT ?? 4001);
 }

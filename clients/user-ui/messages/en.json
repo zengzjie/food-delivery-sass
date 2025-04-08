@@ -11,6 +11,10 @@
     "title": "404",
     "description": "This page could not be found."
   },
+  "ServerErrorPage": {
+    "title": "500",
+    "description": "Server internal error, Please contact the administrator！"
+  },
   "LocaleSwitcher": {
     "en": "English",
     "zh": "Chinese",
@@ -33,11 +37,42 @@
     "header": "Login with Food Platform",
     "email": "Enter your Email",
     "password": "Enter your Password",
-    "forgotPassword": "Forgot your password?",
+    "resetPassword": "Reset Password",
     "login": "Login",
     "orJoinWith": "Or Join With",
-    "notAccount": "Not have any account?",
-    "signUp": "Sign up"
+    "notAccount": "Not have an account?",
+    "signUp": "Sign up",
+    "loginSuccess": "Login successful.",
+    "loginError": "Login failed, please try again.",
+    "logoutSuccess": "Logout successful.",
+    "logoutError": "Logout failed, please try again."
+  },
+  "SignUpModal": {
+    "header": "Sign Up with Food Platform",
+    "name": "Enter your Name",
+    "email": "Enter your Email",
+    "mobile": "Enter your Mobile",
+    "password": "Enter your Password",
+    "resetPassword": "Reset Password",
+    "login": "Login",
+    "orJoinWith": "Or Join With",
+    "alreadyAccount": "Already have an account?",
+    "signIn": "Sign In",
+    "signUp": "Sign Up",
+    "captchaSent": "The captcha has been sent, please check your email.",
+    "captchaTitle": "Verify your captcha",
+    "captchaCodeTip": "Please enter the activation verification code.",
+    "captchaOTP": "Verify OTP",
+    "captchaSuccess": "Captcha verification successful.",
+    "captchaError": "Captcha verification failed, please try again.",
+    "goBackToSignIn": "Go back to sign in?"
+  },
+  "ResetPasswordModal": {
+    "header": "Reset Password",
+    "email": "Enter your Email",
+    "tip": "Or Go Back to",
+    "login": "Login",
+    "successMsg": "Reset password link has been sent to your email"
   },
   "ProfileDropDown": {
     "signedInAs": "Signed in as",
@@ -47,8 +82,10 @@
     "logOut": "Log Out"
   },
   "FormValidationErrorPrompt": {
+    "placeholderName": "Please enter name",
     "required": "This field is required.",
     "invalidEmail": "Please enter a valid email address.",
+    "invalidMobile": "Please enter a valid mobile number.",
     "passwordMismatch": "Passwords do not match.",
     "passwordLength": "Password must be at least 8 characters long!"
   },
