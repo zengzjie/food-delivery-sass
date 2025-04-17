@@ -1,7 +1,6 @@
 ## Documentation
 
-- [中文文档](README.md)
-- [English Version](README.en.md)
+[ZH-CN](README.md) | [EN](README.en.md)
 
 ---
 
@@ -97,7 +96,7 @@ A modern, scalable, and feature-rich food delivery platform built with cutting-e
 ### 🗄️ Database
 
 - **Relational Database**:
-  - Prisma ORM with support for MongoDB.
+  - Prisma ORM with support for MongoDB、PostgreSQL、MySQL or SQLite.
 - **Schema Management**:
   - Prisma migrations for database schema updates.
 
@@ -108,7 +107,7 @@ A modern, scalable, and feature-rich food delivery platform built with cutting-e
 ### Prerequisites
 
 - Node.js (v18 or later)
-- A relational database (e.g., PostgreSQL, MySQL)
+- A relational database (e.g., MongoDB、PostgreSQL, MySQL)
 - Google OAuth credentials
 
 ### Installation
@@ -128,7 +127,7 @@ A modern, scalable, and feature-rich food delivery platform built with cutting-e
 
 3. Set up environment variables:
 
-   - Copy a `.env.example` file and fill in the corresponding variable values
+   - Copy the `.env.example` file and create files named `.env.development` and `.env.production`, and fill in the corresponding variable values.
 
 4. Run database migrations:
 

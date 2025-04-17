@@ -1,7 +1,6 @@
 ## 文档
 
-- [中文文档](README.md)
-- [English Version](README.en.md)
+[中文](README.md) | [英文](README.en.md)
 
 ---
 
@@ -97,7 +96,7 @@
 ### 🗄️ 数据库
 
 - **关系型数据库**：
-  - 使用 Prisma ORM，支持 PostgreSQL、MySQL 和 SQLite。
+  - 使用 Prisma ORM，支持 MongoDB、PostgreSQL、MySQL 和 SQLite。
 - **模式管理**：
   - 使用 Prisma 迁移工具更新数据库模式。
 
@@ -108,7 +107,7 @@
 ### 前置条件
 
 - Node.js（版本 18 或更高）
-- 一个关系型数据库（如 PostgreSQL、MySQL）
+- 一个关系型数据库（如 MongoDB、PostgreSQL、MySQL）
 - Google OAuth 凭据
 
 ### 安装步骤
@@ -128,7 +127,7 @@
 
 3. 配置环境变量：
 
-   - 复制 `.env.example` 文件，并填写相应的变量值。
+   - 复制 `.env.example` 文件并创建一份名为 `.env.development` 和 `.env.production` 的文件，并填写相应的变量值。
 
 4. 运行数据库迁移：
 
