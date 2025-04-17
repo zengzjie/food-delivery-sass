@@ -11,6 +11,7 @@ const nextConfig: NextConfig = {
     // 启用局部渲染优化
     // ppr: "incremental",
   },
+  output: "standalone",
   // rewrites: async () => {
   //   return [
   //     {

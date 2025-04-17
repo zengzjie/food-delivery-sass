@@ -1,5 +1,5 @@
-export const accessTokenExpiresIn = '1m';
-export const refreshTokenExpiresIn = '5m';
+export const accessTokenExpiresIn = '1d';
+export const refreshTokenExpiresIn = '7d';
 export const accessTokenMaxAge = 1000 * 60 * 60 * 24;
 export const refreshTokenMaxAge = 1000 * 60 * 60 * 24 * 7;
 

@@ -1,20 +1,22 @@
 import React from "react";
-import HomeScreen from "@/screens/HomeScreen";
 import { setRequestLocale } from "next-intl/server";
+import HomeScreen from "@/screens/HomeScreen";
 
 type Props = {
-  params: Promise<{ locale: string }>;
+  params: { locale: string };
 };
 
-const Page = async ({ params }: Props) => {
+const DashboardPage = async ({ params }: Props) => {
   const { locale } = await params;
+
   // 启用静态渲染
   setRequestLocale(locale);
   return (
     <div>
       <HomeScreen />
+      <h1>Dashboard</h1>
     </div>
   );
 };
 
-export default Page;
+export default DashboardPage;

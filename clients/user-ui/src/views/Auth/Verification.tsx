@@ -91,22 +91,26 @@ const Verification = (props: VerificationProps) => {
   return (
     <section
       tabIndex={-1}
-      className="flex flex-col relative z-50 w-full box-border dark:bg-slate-900 bg-background outline-none mx-1 my-1 sm:mx-6 sm:my-16 max-w-lg rounded-large shadow-small overflow-y-hidden"
+      className="flex flex-col relative z-50 box-border dark:bg-slate-900 bg-background outline-none 
+               mx-auto my-1 sm:my-8 w-[calc(100%-2rem)] sm:w-[450px] rounded-large shadow-small 
+               max-h-[90vh] sm:max-h-[85vh] overflow-y-auto"
     >
-      <button
-        tabIndex={0}
-        id="modal-close"
-        className="btn-close"
-        role="button"
-        aria-label="Close"
-        aria-hidden="false"
-        type="button"
-        onClick={closeScreen}
-      >
-        <CloseX size={20} />
-      </button>
+      <header className="pt-4 pb-2 px-4 flex-initial text-large font-semibold sticky top-0 bg-background dark:bg-slate-900 z-[5] flex justify-between items-center">
+        {t("captchaTitle")}
+        <button
+          tabIndex={0}
+          id="modal-close"
+          className="btn-close rounded-full p-1 hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors"
+          role="button"
+          aria-label="Close"
+          aria-hidden="false"
+          type="button"
+          onClick={closeScreen}
+        >
+          <CloseX size={20} />
+        </button>
+      </header>
 
-      <h1 className={`${styles.title}`}>{t("captchaTitle")}</h1>
       <br />
       <div className="w-full flex items-center justify-center mt-2">
         <div className="w-[80px] h-[80px] rounded-full bg-[#497DF2] flex items-center justify-center">

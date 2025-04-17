@@ -95,3 +95,14 @@ export class ResetPasswordDto {
   @IsEmail({}, { message: 'Email must be valid.' })
   email: string;
 }
+
+@InputType()
+export class ExecutePasswordResetDto {
+  @Field()
+  @IsNotEmpty({ message: 'Password is required' })
+  @MaxLength(8, { message: 'Password must be at least 8 characters.' })
+  password: string;
+  @Field()
+  @IsNotEmpty({ message: 'The password reset Token cannot be empty.' })
+  token: string;
+}

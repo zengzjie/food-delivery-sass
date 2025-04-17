@@ -43,7 +43,7 @@
     "notAccount": "没有任何账户？",
     "signUp": "注册",
     "loginSuccess": "登录成功。",
-    "loginError": "登录失败，请重试。",
+    "loginError": "邮箱或密码错误，请重试。",
     "logoutSuccess": "登出",
     "logoutError": "登出失败，请重试。"
   },
@@ -72,7 +72,11 @@
     "email": "电子邮件",
     "tip": "或者返回",
     "login": "登录",
-    "successMsg": "重置密码链接已发送至您的邮箱"
+    "submit": "提交",
+    "password": "密码",
+    "confirmPassword": "确认密码",
+    "successMsg": "重置密码链接已发送至您的邮箱",
+    "successReset": "密码重置成功"
   },
   "ProfileDropDown": {
     "signedInAs": "当前账号为",
@@ -87,9 +91,18 @@
     "invalidEmail": "请输入有效的电子邮件地址。",
     "invalidMobile": "请输入有效的手机号码。",
     "passwordMismatch": "密码不匹配。",
-    "passwordLength": "密码长度必须至少为8个字符！"
+    "passwordLength": "密码长度必须至少为8个字符！",
+    "passwordNotMatch": "密码不匹配"
   },
-  "HomePage": {
-    "logo": "图标"
+  "HomeIntroduction": {
+    "mainTitle": "食品配送平台",
+    "subTitle": "快速便捷的食品配送",
+    "desc": "我们的食品配送平台为您提供最便捷的餐点配送服务。无论您身处何地，您都可以享受美食。从高端餐厅到街头小吃，应有尽有，满足您的味蕾",
+    "orderNow": "立即订购",
+    "learnMore": "了解更多",
+    "minutes": "分钟",
+    "cooperativeRestaurants": "合作餐厅",
+    "averageDeliveryTime": "平均送达时间",
+    "userRating": "用户评分"
   }
 }

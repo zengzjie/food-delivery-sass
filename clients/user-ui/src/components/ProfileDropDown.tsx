@@ -25,10 +25,13 @@ import { useMutation } from "@apollo/client";
 import { LOGOUT_MUTATION } from "@/graphql/actions/logout.action";
 import toast from "react-hot-toast";
 import { useUserStore } from "@/stores/userStore";
+import { useSession } from "next-auth/react";
+import { googleLogout } from "@/lib/actions";
 
 interface IProfileDropDown {}
 
 export default function ProfileDropDown(props: IProfileDropDown) {
+  const { data: session } = useSession();
   const t = useTranslations("ProfileDropDown");
   const tLogin = useTranslations("LoginModal");
   const tError = useTranslations("ServerErrorPage");
@@ -40,20 +43,30 @@ export default function ProfileDropDown(props: IProfileDropDown) {
     useMutation(LOGOUT_MUTATION);
 
   useEffect(() => {
-    setIsSigned(!!user);
-  }, [user, open]);
+    console.log("🪪 session", session);
+    if (session?.user) {
+      setIsSigned(true);
+    } else {
+      setIsSigned(!!user);
+    }
+  }, [user, open, session]);
 
   const handleOpenAuth = () => {
     toggle(true);
   };
 
   const handleLogOut = async () => {
-    const { data } = await logoutMutation();
-    if (data.logout.code === 200) {
-      toast.success(tLogin("logoutSuccess"));
+    if (session?.user) {
+      await googleLogout();
       window.location.reload();
     } else {
-      toast.error(tError("description"));
+      const { data } = await logoutMutation();
+      if (data.logout.code === 200) {
+        toast.success(tLogin("logoutSuccess"));
+        window.location.reload();
+      } else {
+        toast.error(tError("description"));
+      }
     }
   };
 
@@ -63,14 +76,19 @@ export default function ProfileDropDown(props: IProfileDropDown) {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Avatar className="transition-transform w-7 h-7 ml-2 cursor-pointer">
-              <AvatarImage src={user?.avatar?.url} alt="@user" />
+              <AvatarImage
+                src={
+                  session?.user ? session.user.image ?? "" : user?.avatar?.url
+                }
+                alt="@user"
+              />
               <AvatarFallback className="text-xs">CN</AvatarFallback>
             </Avatar>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-56" align="end">
             <DropdownMenuLabel>{t("signedInAs")}</DropdownMenuLabel>
             <DropdownMenuLabel className="font-semibold">
-              {user?.email}
+              {session?.user ? session.user.email : user?.email}
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>

@@ -1,5 +1,9 @@
 import * as bcrypt from 'bcrypt';
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from '../../../prisma/prisma.service';
@@ -9,6 +13,7 @@ import { EmailService } from './email/email.service';
 import { GraphContextType } from './typing';
 import { RedisService } from './redis/redis.service';
 import { STATUS_CODE } from './constants';
+import { decrypt } from './utils/decrypt';
 
 interface UserData {
   name: string;
@@ -71,14 +76,18 @@ export class UsersService {
       throw new BadRequestException('Email already exists with this email!');
     }
 
-    const isPhoneExist = await this.prisma.user.findUnique({
+    const isPhoneExist = await this.prisma.user.findMany({
       where: {
-        mobile,
+        mobile: {
+          // 筛选 mobile 不等于 null 且在数组中
+          not: null,
+          in: [mobile],
+        },
       },
     });
-    if (isPhoneExist) {
+    if (isPhoneExist.length > 0) {
       throw new BadRequestException(
-        'Phone number already exists with this phone number!',
+        'The phone number already exists, please use a different phone number to register!',
       );
     }
 
@@ -142,6 +151,33 @@ export class UsersService {
       throw new BadRequestException('User already exist with this email!');
     }
 
+    // 使用事物确保用户和头像创建的原子性
+    // return await this.prisma.$transaction(async (prisma) => {
+    //   // 先创建用户
+    //   const newUser = await this.prisma.user.create({
+    //     data: {
+    //       name,
+    //       email,
+    //       password,
+    //       mobile,
+    //     },
+    //   });
+
+    //   // 然后创建头像并明确关联到用户
+    //   await this.prisma.avatars.create({
+    //     data: {
+    //       // public_id: 'user_123_avatar', // 这是 Cloudinary 或 S3 存储的唯一标识
+    //       // url: 'https://res.cloudinary.com/myapp/image/upload/v123456/user_123_avatar.jpg',
+    //       public_id: 'avatar',
+    //       url: 'https://github.com/shadcn.png',
+    //       userId: newUser.id, // 确保头像与用户关联
+    //     },
+    //   });
+
+    //   return {
+    //     response,
+    //   };
+    // });
     await this.prisma.user.create({
       data: {
         name,
@@ -155,11 +191,12 @@ export class UsersService {
             public_id: 'avatar',
             url: 'https://github.com/shadcn.png',
           },
-        },
+        }
+      },
+      include: {
+        avatar: true
       },
     });
-
-    return { response };
   }
 
   /**
@@ -198,9 +235,24 @@ export class UsersService {
   }
 
   async getUserPosts(id: string) {
+    // 先检查用户是否存在
+    const user = await this.prisma.user.findUnique({
+      where: { id },
+      include: { posts: { take: 1 } }, // 只取一条记录来检查是否有帖子
+    });
+
+    // 如果用户不存在或没有帖子，直接返回空数组
+    if (!user || user.posts.length === 0) {
+      return [];
+    }
+
+    // 否则执行正常查询，包含用户关系
     return this.prisma.post.findMany({
       where: {
         userId: id,
+      },
+      include: {
+        user: true,
       },
     });
   }
@@ -256,6 +308,50 @@ export class UsersService {
       code: STATUS_CODE.SUCCESS,
       msg: 'Reset password link has been sent to your email',
     };
+  }
+
+  /**
+   * @description: Execute password reset
+   * @return {*}
+   */
+  async executePasswordReset({ password: encryptPassWord, token }) {
+    if (!token) {
+      throw new BadRequestException(
+        'The password reset Token cannot be empty.',
+      );
+    }
+
+    try {
+      const { user } = this.jwtService.verify(token, {
+        secret: this.configService.get<string>('RESET_PASSWORD_SECRET'),
+      });
+
+      if (!user) {
+        throw new BadRequestException('Invalid reset token');
+      }
+
+      const password = decrypt(encryptPassWord);
+
+      await this.prisma.user.update({
+        where: {
+          id: user.id,
+        },
+        data: {
+          password: await bcrypt.hash(password, 10),
+        },
+      });
+      return {
+        code: STATUS_CODE.SUCCESS,
+        msg: 'Password reset successfully',
+      };
+    } catch (error) {
+      if (error.name === 'TokenExpiredError') {
+        // 添加一个重置密码的验证token过期的提示语 “此链接无效或已过期，请尝试重新发送密码重置邮件。”
+        throw new BadRequestException(
+          'This link is invalid or has expired, please try sending the password reset email again.',
+        );
+      }
+    }
   }
 
   /**

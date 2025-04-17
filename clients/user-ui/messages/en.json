@@ -43,7 +43,7 @@
     "notAccount": "Not have an account?",
     "signUp": "Sign up",
     "loginSuccess": "Login successful.",
-    "loginError": "Login failed, please try again.",
+    "loginError": "Email or password error, please try again.",
     "logoutSuccess": "Logout successful.",
     "logoutError": "Logout failed, please try again."
   },
@@ -69,10 +69,14 @@
   },
   "ResetPasswordModal": {
     "header": "Reset Password",
-    "email": "Enter your Email",
+    "email": "Enter your email",
     "tip": "Or Go Back to",
     "login": "Login",
-    "successMsg": "Reset password link has been sent to your email"
+    "submit": "Submit",
+    "password": "Enter your password",
+    "confirmPassword": "Confirm your password",
+    "successMsg": "Reset password link has been sent to your email",
+    "successReset": "Password reset successfully."
   },
   "ProfileDropDown": {
     "signedInAs": "Signed in as",
@@ -87,9 +91,18 @@
     "invalidEmail": "Please enter a valid email address.",
     "invalidMobile": "Please enter a valid mobile number.",
     "passwordMismatch": "Passwords do not match.",
-    "passwordLength": "Password must be at least 8 characters long!"
+    "passwordLength": "Password must be at least 8 characters long!",
+    "passwordNotMatch": "Password does not match"
   },
-  "HomePage": {
-    "logo": "Logo"
+  "HomeIntroduction": {
+    "mainTitle": "Delicious food at your fingertips",
+    "subTitle": "Quick and convenient food delivery",
+    "desc": "Our food delivery platform provides you with the most convenient meal delivery service. No matter where you are, you can enjoy delicious cuisine. From high-end restaurants to street snacks, everything is available to satisfy your taste buds.",
+    "orderNow": "Order Now",
+    "learnMore": "Learn More",
+    "minutes": "Minutes",
+    "cooperativeRestaurants": "Cooperative Restaurant",
+    "averageDeliveryTime": "Average delivery time",
+    "userRating": "User Rating"
   }
 }

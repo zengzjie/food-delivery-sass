@@ -37,8 +37,7 @@ const ResetPassword = (props: ResetPasswordProps) => {
     resolver: zodResolver(formSchema),
   });
 
-  const [resetPassword, { loading }] =
-    useLazyQuery(RESET_PASSWORD_QUERY);
+  const [resetPassword, { loading }] = useLazyQuery(RESET_PASSWORD_QUERY);
 
   useLayoutEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -94,22 +93,24 @@ const ResetPassword = (props: ResetPasswordProps) => {
   return (
     <section
       tabIndex={-1}
-      className="flex flex-col relative z-50 w-full box-border dark:bg-slate-900 bg-background outline-none mx-1 my-1 sm:mx-6 sm:my-16 max-w-lg rounded-large shadow-small overflow-y-hidden"
+      className="flex flex-col relative z-50 w-full box-border dark:bg-slate-900 bg-background outline-none 
+               mx-1 my-1 sm:mx-6 sm:my-8 max-w-lg rounded-large shadow-small 
+               max-h-[90vh] sm:max-h-[85vh] overflow-y-auto"
     >
-      <button
-        tabIndex={0}
-        id="modal-close"
-        className="btn-close"
-        role="button"
-        aria-label="Close"
-        aria-hidden="false"
-        type="button"
-        onClick={closeScreen}
-      >
-        <CloseX size={20} />
-      </button>
-      <header className="py-4 px-6 flex-initial text-large font-semibold flex flex-col gap-1">
+      <header className="pt-4 pb-2 px-4 flex-initial text-large font-semibold sticky top-0 bg-background dark:bg-slate-900 z-[5] flex justify-between items-center">
         {t("header")}
+        <button
+          tabIndex={0}
+          id="modal-close"
+          className="btn-close"
+          role="button"
+          aria-label="Close"
+          aria-hidden="false"
+          type="button"
+          onClick={closeScreen}
+        >
+          <CloseX size={20} />
+        </button>
       </header>
       <div className="px-4 py-6 flex flex-col">
         <form className="flex flex-col" onSubmit={handleSubmit(onSubmit)}>

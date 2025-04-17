@@ -1,9 +1,9 @@
 import { useState } from "react";
 import ReactDOM from "react-dom";
-import Login from "../shared/Auth/Login";
-import Signup from "@/shared/Auth/Signup";
-import Verification from "@/shared/Auth/Verification";
-import ResetPassword from "@/shared/Auth/ResetPassword";
+import Login from "@/views/Auth/Login";
+import Signup from "@/views/Auth/Signup";
+import Verification from "@/views/Auth/Verification";
+import ResetPassword from "@/views/Auth/ResetPassword";
 
 type AuthScreenProps = {
   toggleScreen: (nextValue?: any) => void;

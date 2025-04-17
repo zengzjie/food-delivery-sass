@@ -18,6 +18,7 @@ import {
 import {
   ActivationDto,
   DeleteUserDto,
+  ExecutePasswordResetDto,
   LoginDto,
   RegisterDto,
   ResetPasswordDto,
@@ -152,8 +153,22 @@ export class UsersResolver {
     return result;
   }
 
+  @Mutation(() => BaseResponse)
+  async executePasswordReset(
+    @Args('executePasswordResetInput')
+    executePasswordResetDto: ExecutePasswordResetDto,
+  ): Promise<BaseResponse> {
+    const result = await this.usersService.executePasswordReset(
+      executePasswordResetDto,
+    );
+    return result;
+  }
+
   @ResolveField(() => [Post])
   async posts(@Parent() user: User): Promise<Post[]> {
+    if (!user.id) {
+      return [];
+    }
     return this.usersService.getUserPosts(user.id);
   }
 

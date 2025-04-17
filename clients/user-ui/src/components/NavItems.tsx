@@ -1,13 +1,16 @@
 "use client";
+import { useState } from "react";
+import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 
-const NavItems = ({ activeItem = 0 }: { activeItem?: number }) => {
+const NavItems = () => {
+  const [activeItem, setActiveItem] = useState(0);
   const t = useTranslations("NavItems");
   const navItems = [
     {
       title: t("home"),
-      url: "/",
+      url: DEFAULT_LOGIN_REDIRECT,
     },
     {
       title: t("about us"),
@@ -32,12 +35,13 @@ const NavItems = ({ activeItem = 0 }: { activeItem?: number }) => {
         return (
           <Link
             className={`text-[16px] font-Poppins font-[500] ${
-              activeItem === index
-                ? "text-primary"
-                : "text-muted-foreground"
+              activeItem === index ? "text-foreground" : "text-muted-foreground"
             } max-[600px]:text-[14px] max-[600px]:font-[400]`}
             key={item.url}
             href={item.url}
+            onClick={() => {
+              setActiveItem(index);
+            }}
           >
             {item.title}
           </Link>

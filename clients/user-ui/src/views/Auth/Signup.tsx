@@ -88,105 +88,105 @@ const Signup = (props: SignUpProps) => {
       needCaptcha(resp.data.register.activation_token);
       reset();
     } catch (error: any) {
-      toast.error(error.message);
+      console.log(error);
     }
   };
 
   return (
     <section
       tabIndex={-1}
-      className="flex flex-col relative z-50 w-full box-border dark:bg-slate-900 bg-background outline-none mx-1 my-1 sm:mx-6 max-w-lg rounded-large shadow-small overflow-y-hidden"
+      className="flex flex-col relative z-50 box-border dark:bg-slate-900 bg-background outline-none 
+               mx-auto my-1 sm:my-8 w-[calc(100%-2rem)] sm:w-[450px] rounded-large shadow-small 
+               max-h-[90vh] sm:max-h-[85vh] overflow-y-auto scrollbar"
     >
-      <button
-        tabIndex={0}
-        id="modal-close"
-        className="btn-close"
-        role="button"
-        aria-label="Close"
-        aria-hidden="false"
-        type="button"
-        onClick={closeScreen}
-      >
-        <CloseX size={20} />
-      </button>
-      <header className="py-4 px-6 flex-initial text-large font-semibold flex flex-col gap-1">
+      <header className="pt-4 pb-2 px-4 flex-initial text-large font-semibold sticky top-0 bg-background dark:bg-slate-900 z-[5] flex justify-between items-center">
         {t("header")}
+        <button
+          tabIndex={0}
+          id="modal-close"
+          className="btn-close rounded-full p-1 hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors"
+          role="button"
+          aria-label="Close"
+          aria-hidden="false"
+          type="button"
+          onClick={closeScreen}
+        >
+          <CloseX size={20} />
+        </button>
       </header>
-      <div className="pr-4 pl-6 py-6 flex flex-col">
+      <div className="px-4 py-3 flex flex-col">
         <form className="flex flex-col" onSubmit={handleSubmit(onSubmit)}>
-          <div className="sm:h-96 overflow-y-scroll scrollbar">
-            <div className="w-full pr-2">
-              <label className={`${styles.label}`}>{t("name")}</label>
-              <input
-                {...register("name")}
-                type="text"
-                placeholder={_t("placeholderName")}
-                className={`${styles.input}`}
-              />
-              {errors.name && (
-                <span className="text-red-500 block mt-1">{`${_t(
-                  "required"
-                )}`}</span>
-              )}
-            </div>
-            <div className="w-full mt-5 pr-2">
-              <label className={`${styles.label}`}>{t("email")}</label>
-              <input
-                {...register("email")}
-                type="email"
-                placeholder="example@gmail.com"
-                className={`${styles.input}`}
-              />
-              {errors.email && (
-                <span className="text-red-500 block mt-1">{`${_t(
-                  "invalidEmail"
-                )}`}</span>
-              )}
-            </div>
-            <div className="w-full mt-5 pr-2">
-              <label className={`${styles.label}`}>{t("mobile")}</label>
-              <input
-                {...register("mobile")}
-                type="tel"
-                placeholder="+86 138********"
-                className={`${styles.input}`}
-              />
-              {errors.mobile && (
-                <span className="text-red-500 block mt-1">{`${_t(
-                  "invalidMobile"
-                )}`}</span>
-              )}
-            </div>
-            <div className="w-full mt-5 relative mb-1 pr-2">
-              <label htmlFor="password" className={`${styles.label}`}>
-                {t("password")}
-              </label>
-              <input
-                {...register("password")}
-                type={show ? "text" : "password"}
-                placeholder="password!@%"
-                className={`${styles.input}`}
-              />
-              {!show ? (
-                <EyeOff
-                  className="absolute bottom-3 right-4 z-1 cursor-pointer"
-                  size={20}
-                  onClick={() => setShow(true)}
-                />
-              ) : (
-                <Eye
-                  className="absolute bottom-3 right-4 z-1 cursor-pointer"
-                  size={20}
-                  onClick={() => setShow(false)}
-                />
-              )}
-            </div>
-            {errors.password && (
-              <span className="text-red-500">{`${_t("passwordLength")}`}</span>
+          <div className="w-full">
+            <label className={`${styles.label}`}>{t("name")}</label>
+            <input
+              {...register("name")}
+              type="text"
+              placeholder={_t("placeholderName")}
+              className={`${styles.input}`}
+            />
+            {errors.name && (
+              <span className="text-red-500 block mt-1">{`${_t(
+                "required"
+              )}`}</span>
             )}
           </div>
+          <div className="w-full mt-3">
+            <label className={`${styles.label}`}>{t("email")}</label>
+            <input
+              {...register("email")}
+              type="email"
+              placeholder="example@gmail.com"
+              className={`${styles.input}`}
+            />
+            {errors.email && (
+              <span className="text-red-500 block mt-1">{`${_t(
+                "invalidEmail"
+              )}`}</span>
+            )}
+          </div>
+          <div className="w-full mt-3">
+            <label className={`${styles.label}`}>{t("mobile")}</label>
+            <input
+              {...register("mobile")}
+              type="tel"
+              placeholder="+86 138********"
+              className={`${styles.input}`}
+            />
+            {errors.mobile && (
+              <span className="text-red-500 block mt-1">{`${_t(
+                "invalidMobile"
+              )}`}</span>
+            )}
+          </div>
+          <div className="w-full mt-3 relative mb-1">
+            <label htmlFor="password" className={`${styles.label}`}>
+              {t("password")}
+            </label>
+            <input
+              {...register("password")}
+              type={show ? "text" : "password"}
+              placeholder="password!@%"
+              className={`${styles.input}`}
+            />
+            {!show ? (
+              <EyeOff
+                className="absolute bottom-3 right-2 z-1 cursor-pointer"
+                size={20}
+                onClick={() => setShow(true)}
+              />
+            ) : (
+              <Eye
+                className="absolute bottom-3 right-2 z-1 cursor-pointer"
+                size={20}
+                onClick={() => setShow(false)}
+              />
+            )}
+          </div>
+          {errors.password && (
+            <span className="text-red-500">{`${_t("passwordLength")}`}</span>
+          )}
 
-          <div className="w-full mt-5">
+          <div className="w-full mt-4">
             <button
               type="submit"
               className={`${styles.button}`}
@@ -198,7 +198,7 @@ const Signup = (props: SignUpProps) => {
               {t("signUp")}
             </button>
           </div>
-          <h5 className="text-center pt-4 font-Poppins text-[16px]">
+          <h5 className="text-center pt-3 font-Poppins text-[16px]">
             {t("orJoinWith")}
           </h5>
           <div className="flex items-center justify-center my-3 space-x-4">

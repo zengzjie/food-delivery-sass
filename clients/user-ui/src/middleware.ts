@@ -1,9 +1,20 @@
 import { match as matchLocale } from "@formatjs/intl-localematcher";
-import createMiddleware from "next-intl/middleware";
 import Negotiator from "negotiator";
-import { Locale, routing } from "./i18n/routing";
-import { NextRequest } from "next/server";
+import { auth } from "@/auth-edge";
+import createIntlMiddleware from "next-intl/middleware";
 import { defaultLocale, locales } from "./utils/config";
+import { NextRequest, NextResponse } from "next/server";
+import { Locale, routing } from "./i18n/routing";
+import {
+  apiAuthPrefix,
+  DEFAULT_LOGIN_REDIRECT,
+  publicRoutes,
+  authPages,
+} from "./routes";
+
+interface AppRouteHandlerFnContext {
+  params?: Record<string, string | string[]>;
+}
 
 function getLocale(request: NextRequest): string | undefined {
   const customLocale = request.cookies.get("NEXT_LOCALE");
@@ -31,24 +42,78 @@ function getLocale(request: NextRequest): string | undefined {
   return locale;
 }
 
-export default async function middleware(req: NextRequest) {
-  const locale = (getLocale(req) || defaultLocale) as Locale;
+const intlMiddleware = createIntlMiddleware({
+  ...routing,
+});
 
-  const intlMiddleware = createMiddleware({
-    ...routing,
-  });
-  const response = intlMiddleware(req);
+const getPathnameRegex = (pages: string[]) =>
+  RegExp(
+    `^(/(${locales.join("|")}))?(${pages
+      .flatMap((p) =>
+        p === DEFAULT_LOGIN_REDIRECT ? ["", DEFAULT_LOGIN_REDIRECT] : p
+      )
+      .join("|")})/?$`,
+    "i"
+  );
 
-  const acceptLang = req.headers.get("accept-language");
-  const defaultLang = "zh-CN";
-  const siteLocale = acceptLang ? acceptLang.split(",")[0] : defaultLang;
+const publicRoutesPathnameRegex = getPathnameRegex(publicRoutes);
+const authRoutesPathnameRegex = getPathnameRegex(authPages);
 
-  // 执行了 set-cookie 之后，所有的缓存会被清空
-  response.cookies.set("NEXT_LOCALE", locale as string);
-  // response.headers.set("x-site-locale", siteLocale);
+const authMiddleware = (
+  request: NextRequest,
+  ctx: AppRouteHandlerFnContext
+) => {
+  return auth((req) => {
+    const locale = (getLocale(req) || defaultLocale) as Locale;
+    const path = req.nextUrl.pathname;
+    const isAuth = req.auth;
 
-  return response;
-}
+    const isPublicPage = publicRoutesPathnameRegex.test(path);
+    const isAuthPage = authRoutesPathnameRegex.test(path);
+
+    // 已认证且访问登录页则重定向到指定的页面 例如首页 /
+    // if (isAuth && isAuthPage) {
+    // const url = req.nextUrl.clone();
+    // const fromValue = url.searchParams.get("from");
+    // return NextResponse.redirect(new URL(fromValue ?? DEFAULT_LOGIN_REDIRECT, req.nextUrl));
+    // }
+
+    // 未认证且访问需要登录的页面则重定向到 /，且携带原本的路径为 from 参数，在登录成功后跳转到原本的页面
+    if (!isAuth && !isPublicPage) {
+      let from = req.nextUrl.pathname.replace(/^\/(zh|en)/, ""); // 去掉多语言前缀
+      if (req.nextUrl.search) {
+        from += req.nextUrl.search;
+      }
+      return NextResponse.redirect(
+        new URL(
+          DEFAULT_LOGIN_REDIRECT + `?from=${encodeURIComponent(from)}`,
+          request.url
+        )
+      );
+    }
+    //   const acceptLang = req.headers.get("accept-language");
+    //   const defaultLang = "zh-CN";
+    //   const siteLocale = acceptLang ? acceptLang.split(",")[0] : defaultLang;
+
+    // 执行了 set-cookie 之后，所有的缓存会被清空
+    const response = intlMiddleware(request);
+    response.cookies.set("NEXT_LOCALE", locale as string);
+    // response.headers.set("x-site-locale", siteLocale);
+
+    return response;
+  })(request, ctx);
+};
+
+export const middleware = (
+  request: NextRequest,
+  ctx: AppRouteHandlerFnContext
+): NextResponse => {
+  if (request.nextUrl.pathname.startsWith(apiAuthPrefix)) {
+    return NextResponse.next();
+  }
+
+  return authMiddleware(request, ctx) as NextResponse;
+};
 
 export const config = {
   // 仅匹配国际化路径名
@@ -59,6 +124,6 @@ export const config = {
     "/(zh|en)/:path*",
     // 启用添加缺失语言的重定向
     // (e.g. `/pathnames` -> `/en/pathnames`)
-    "/((?!_next|_vercel|.*\\..*).*)",
+    "/((?!api|_next/static|_next/image|_vercel|favicon.ico).*)",
   ],
 };

@@ -1,3 +1,6 @@
 {
-    "omlet.rootPath": "clients/user-ui"
+    "omlet.rootPath": "clients/user-ui",
+    "cSpell.words": [
+        "NEXTAUTH"
+    ]
 }

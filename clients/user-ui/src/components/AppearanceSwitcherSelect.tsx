@@ -72,9 +72,9 @@ export default function AppearanceSwitcherSelect({ items, label }: Props) {
         showDownIcon={false}
       >
         {theme === "light" ? (
-          <SunMedium className="h-6 w-6 transition-colors" />
+          <SunMedium className="h-6 w-6 transition-colors text-foreground" />
         ) : (
-          <Moon className="h-6 w-6 transition-colors" />
+          <Moon className="h-6 w-6 transition-colors text-foreground" />
         )}
       </SelectTrigger>
     );

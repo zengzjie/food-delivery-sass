@@ -43,7 +43,7 @@ export default function LocaleSwitcherSelect({ items, label }: Props) {
           )}
           showDownIcon={false}
         >
-          <Languages className="h-6 w-6 transition-colors" />
+          <Languages className="h-6 w-6 transition-colors text-foreground" />
         </SelectTrigger>
         <SelectContent align="end">
           <SelectGroup>

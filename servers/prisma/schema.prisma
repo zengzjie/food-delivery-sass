@@ -28,6 +28,33 @@ enum Role {
   Ordinary_User
 }
 
+model Account {
+  id                String  @id @default(auto()) @map("_id") @db.ObjectId
+  userId            String  @db.ObjectId
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.String
+  access_token      String? @db.String
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.String
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  sessionToken String   @unique
+  userId       String   @db.ObjectId
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
 model Avatars {
   id        String @id @default(auto()) @map("_id") @db.ObjectId
   public_id String
@@ -48,16 +75,23 @@ model Post {
 }
 
 model User {
-  id       String   @id @default(auto()) @map("_id") @db.ObjectId
+  id       String    @id @default(auto()) @map("_id") @db.ObjectId
   name     String
-  sex      Int      @default(1) // 0 - 女 1 - 男
-  email    String   @unique
-  mobile   String   @unique
+  sex      Int       @default(1) // 0 - 女 1 - 男
+  email    String    @unique
+  mobile   String?
+  // mobile Float? @unique  ===> we can't use this line because sometime our phone number is null and then we can't compare it
   address  String?
   password String
   avatar   Avatars?
-  role     Role     @default(Ordinary_User)
-  createAt DateTime @default(now())
-  updateAt DateTime @updatedAt
+  role     Role      @default(Ordinary_User)
+  createAt DateTime  @default(now())
+  updateAt DateTime  @updatedAt
   posts    Post[]
+  Account  Account[]
+  Session  Session[]
+
+  // In this approach, a composite unique constraint (@@unique) is created on both email and mobile. This allows mobile to be null but enforces uniqueness when mobile is not null.
+  // This is a composite unique constraint on email and mobile. It allows both fields to be null, but if either field is not null, it enforces uniqueness across both fields. 
+  @@unique([email, mobile], name: "unique_email_mobile")
 }

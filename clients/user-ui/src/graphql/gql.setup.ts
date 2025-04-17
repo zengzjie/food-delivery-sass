@@ -135,6 +135,7 @@ const errorLink = onError(
             });
           case STATUS_CODE.FORBIDDEN:
             console.error("Access denied. User does not have permissions.");
+            toast.error(err.message);
             break;
           case STATUS_CODE.INTERNAL_SERVER_ERROR:
             console.error("Internal server error:", err);
