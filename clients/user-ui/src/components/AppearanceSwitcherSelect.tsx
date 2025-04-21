@@ -66,7 +66,7 @@ export default function AppearanceSwitcherSelect({ items, label }: Props) {
       <SelectTrigger
         aria-label={label}
         className={clsx(
-          "rounded-sm p-2 transition-colors hover:bg-accent border-none bg-transparent",
+          "rounded-sm p-2 transition-colors hover:bg-gray-200 hover:dark:bg-gray-700 border-none bg-transparent",
           isPending && "pointer-events-none opacity-60"
         )}
         showDownIcon={false}
@@ -80,28 +80,27 @@ export default function AppearanceSwitcherSelect({ items, label }: Props) {
     );
   };
 
-  if (!mounted) {
-    return (
-      <Select>
-        <Trigger />
-      </Select>
-    );
-  }
-
   return (
-    <div className="relative pr-1">
-      <Select value={theme} onValueChange={handleAppearanceChange}>
-        <Trigger />
-        <SelectContent align="end">
-          <SelectGroup>
-            {items.map((item) => (
-              <SelectItem key={item.value} value={item.value}>
-                {item.label}
-              </SelectItem>
-            ))}
-          </SelectGroup>
-        </SelectContent>
-      </Select>
+    <div className="relative">
+      {mounted ? (
+        <Select value={theme} onValueChange={handleAppearanceChange}>
+          <Trigger />
+          <SelectContent align="end">
+            <SelectGroup>
+              {items.map((item) => (
+                <SelectItem key={item.value} value={item.value}>
+                  {item.label}
+                </SelectItem>
+              ))}
+            </SelectGroup>
+          </SelectContent>
+        </Select>
+      ) : (
+        // 占位符
+        <div className="rounded-sm p-2 transition-colors hover:bg-accent border-none bg-transparent">
+          <SunMedium className="h-6 w-6 transition-colors text-foreground" />
+        </div>
+      )}
     </div>
   );
 }

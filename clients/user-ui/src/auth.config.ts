@@ -13,8 +13,8 @@ const refreshAccessToken = async (token: any) => {
         "Content-Type": "application/x-www-form-urlencoded",
       },
       body: new URLSearchParams({
-        client_id: process.env.AUTH_GOOGLE_CLIENT_ID || "",
-        client_secret: process.env.AUTH_GOOGLE_CLIENT_SECRET || "",
+        client_id: process.env.AUTH_GOOGLE_ID || "",
+        client_secret: process.env.AUTH_GOOGLE_SECRET || "",
         grant_type: "refresh_token",
         refresh_token: token.refreshToken,
       }),
@@ -51,6 +51,7 @@ const refreshAccessToken = async (token: any) => {
  * 凭证提供者授权
  *
  * @description 所有验证逻辑都在登录服务器动作上完成
+ * @description V5 中的环境变量变化，所有环境变量都应以 AUTH_ 为前缀， NEXTAUTH_ 不再使用，并且会自动检测对应的 AUTH_xx 传入到配置中
  */
 
 export default {
@@ -65,11 +66,11 @@ export default {
     maxAge: 2592000, // 30 days
     updateAge: 86400, // 1 day
   },
-  secret: process.env.NEXTAUTH_SECRET,
+  // secret: process.env.AUTH_SECRET,
   providers: [
     Google({
-      clientId: process.env.AUTH_GOOGLE_CLIENT_ID,
-      clientSecret: process.env.AUTH_GOOGLE_CLIENT_SECRET,
+      // clientId: process.env.AUTH_GOOGLE_ID,
+      // clientSecret: process.env.AUTH_GOOGLE_SECRET,
       authorization: {
         params: {
           prompt: "consent",
@@ -80,8 +81,8 @@ export default {
       // allowDangerousEmailAccountLinking: true,
     }),
     // Github({
-    //   clientId: process.env.AUTH_GITHUB_CLIENT_ID,
-    //   clientSecret: process.env.AUTH_GITHUB_CLIENT_SECRET,
+    //   clientId: process.env.AUTH_GITHUB_ID,
+    //   clientSecret: process.env.AUTH_GITHUB_SECRET,
     // }),
     // Resend({
     //   apiKey: process.env.RESEND_API_KEY,
@@ -141,5 +142,7 @@ export default {
     },
   },
   debug: process.env.NODE_ENV !== "production", // 在开发环境中启用调试
-  trustHost: true,
+  // 设置了 AUTH_TRUST_HOST 环境变量时自动启动，当使用代理运行 Auth.js 时，此变量是必需的。
+  // 设置为 true 时，我们将信任代理传递给应用程序的 X-Forwarded-Host 和 X-Forwarded-Proto 标头，以自动检测主机 URL ( AUTH_URL )
+  // trustHost: true,
 } satisfies NextAuthConfig;

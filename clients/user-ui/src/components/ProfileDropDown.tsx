@@ -75,14 +75,17 @@ export default function ProfileDropDown(props: IProfileDropDown) {
       {isSigned ? (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Avatar className="transition-transform w-7 h-7 ml-2 cursor-pointer">
+            <Avatar className="transition-transform w-10 h-10 p-1 cursor-pointer">
               <AvatarImage
+                className="rounded-full"
                 src={
-                  session?.user ? session.user.image ?? "" : user?.avatar?.url
+                  session?.user ? session.user?.image ?? "" : user?.avatar?.url
                 }
                 alt="@user"
               />
-              <AvatarFallback className="text-xs">CN</AvatarFallback>
+              <AvatarFallback className="text-xs text-foreground bg-gray-200 dark:bg-gray-700">
+                CN
+              </AvatarFallback>
             </Avatar>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-56" align="end">
@@ -108,7 +111,7 @@ export default function ProfileDropDown(props: IProfileDropDown) {
             <DropdownMenuSeparator />
             <DropdownMenuItem
               onClick={handleLogOut}
-              className="cursor-pointer focus:text-[#F31260] focus:bg-[#451C2A] hover:bg-[#451C2A]"
+              className="cursor-pointer focus:text-[#F41F67] focus:bg-[#FDD6E1] hover:bg-[#FDD6E1] dark:focus:text-[#F31260] dark:focus:bg-[#451C2A] dark:hover:bg-[#451C2A]"
             >
               {logoutLoading ? <Loader2 className="animate-spin mr-1" /> : null}
               <LogOut />
@@ -117,8 +120,11 @@ export default function ProfileDropDown(props: IProfileDropDown) {
           </DropdownMenuContent>
         </DropdownMenu>
       ) : (
-        <div className="px-[0.375rem] py-2">
-          <UserPlus className="cursor-pointer" onClick={handleOpenAuth} />
+        <div className="p-2">
+          <UserPlus
+            className="cursor-pointer text-foreground"
+            onClick={handleOpenAuth}
+          />
         </div>
       )}
 

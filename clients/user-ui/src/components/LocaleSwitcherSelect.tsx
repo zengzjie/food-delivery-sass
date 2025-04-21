@@ -33,12 +33,12 @@ export default function LocaleSwitcherSelect({ items, label }: Props) {
   };
 
   return (
-    <div className="relative pr-1">
+    <div className="relative">
       <Select value={locale} onValueChange={handleLocaleChange}>
         <SelectTrigger
           aria-label={label}
           className={clsx(
-            "rounded-sm p-2 transition-colors hover:bg-accent border-none bg-transparent",
+            "rounded-sm p-2 transition-colors hover:bg-gray-200 hover:dark:bg-gray-700 border-none bg-transparent",
             isPending && "pointer-events-none opacity-60"
           )}
           showDownIcon={false}

@@ -45,7 +45,7 @@ export default function Header() {
   });
 
   return (
-    <header className="sticky top-0 z-[50] w-full shadow-md bg-primary-foreground text-primary-foreground border-b border-secondary">
+    <header className="sticky top-0 z-[50] w-full shadow-md bg-primary-foreground/50 text-primary-foreground border-b border-secondary backdrop-blur-md backdrop-brightness-110">
       <div className="w-[90%] m-auto h-[50px] flex items-center justify-between">
         {/* 左侧 Logo */}
         <Image src={logo} alt="Logo" width={40} height={40} />
@@ -54,7 +54,7 @@ export default function Header() {
           <NavItems />
         </div>
         {/* 右侧 Tool */}
-        <div className="hidden md:flex items-center">
+        <div className="hidden md:flex items-center gap-2">
           <LocaleSwitcher />
           <AppearanceSwitcher />
           <ProfileDropDown />
@@ -117,7 +117,7 @@ export default function Header() {
       </div>
       {/* 移动端下的菜单 */}
       {isNavOpen && (
-        <div className="absolute top-[79px] left-0 w-full z-10 flex flex-col items-start p-4 bg-secondary text-secondary-foreground">
+        <div className="absolute top-[79px] left-0 w-full z-10 flex flex-col items-start p-4 bg-secondary/50 text-secondary-foreground backdrop-blur-lg backdrop-brightness-110">
           <NavItems />
         </div>
       )}
