@@ -1,9 +1,5 @@
 import * as bcrypt from 'bcrypt';
-import {
-  BadRequestException,
-  Injectable,
-  InternalServerErrorException,
-} from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from '../../../prisma/prisma.service';
@@ -191,12 +187,16 @@ export class UsersService {
             public_id: 'avatar',
             url: 'https://github.com/shadcn.png',
           },
-        }
+        },
       },
       include: {
-        avatar: true
+        avatar: true,
       },
     });
+
+    return {
+      response,
+    };
   }
 
   /**

@@ -8,7 +8,7 @@ import { GqlContextType, GqlExecutionContext } from '@nestjs/graphql';
 import { AuthGuard } from '@nestjs/passport';
 import type { Request } from 'express';
 import { ConfiguredEnv } from '../typing';
-import { ExtractJwt } from 'passport-jwt';
+// import { ExtractJwt } from 'passport-jwt';
 import { RedisService } from '../redis/redis.service';
 
 @Injectable()
